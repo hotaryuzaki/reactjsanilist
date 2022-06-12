@@ -1,53 +1,24 @@
 import React, { useContext, useEffect, useState } from 'react';
-import { Button, Container, Modal, Navbar, ToggleButton } from 'react-bootstrap';
+import { FilterContext } from '../config/ReactContext';
+import { Button, Container, Modal, Navbar } from 'react-bootstrap';
 import { FaArrowLeft, FaFilter } from "react-icons/fa";
-// import { FilterContext } from '../config/ReactContext';
+import FilterObject from "./FilterObject";
 import '../mystyle.css';
 
 const appIcon = 'https://anilist.co/img/icons/icon.svg';
 
 function MyNavbar(props) {
-  // const filterContext = useContext(FilterContext);
+  const filterContext = useContext(FilterContext);
   const {
   	hasFilter = false,
     hasBack = false,
     callbackFilter
   } = props;
   const [showModal, setShowModal] = useState(false);
-  // const [filter, setFilter] = useState([...filterContext.filterValue]); // COPY ARRAY VALUE NOT REFERENCE!
-
-  // useEffect (() => {
-  //   if (hasFilter) callbackShowCheckbox(showCheckbox);
-  // }, [showCheckbox])
-
-  // const FilterTypes = () => {
-  //   let data = [];
-
-  //   data.push(
-  //     <p className='FilterTitle' key='FilterTypes-title'>By Types</p>  
-  //   );
-
-  //   filter[0].map((item, index) => {
-  //     data.push(
-  //       <ToggleButton
-  //         key={`FilterTypes-${index}`}
-  //         id={`FilterTypes-${index}`}
-  //         className="FilterButton"
-  //         size="sm"
-  //         type="checkbox"
-  //         variant="outline-primary"
-  //         checked={item.value}
-  //         onChange={(e) => setChecked('filterTypes', index, item.name, !item.value)}
-  //       >
-  //         {item.name}
-  //       </ToggleButton>
-  //     );
-
-  //     return true;
-  //   });
-
-  //   return data;
-  // };
+  
+  useEffect(() => {
+    console.log('filterContext', filterContext.filterValue);
+  }, [filterContext.filterValue])
 
   return (
     <>
@@ -73,20 +44,22 @@ function MyNavbar(props) {
             <span key="hasFilter" className="NavbarRight">
               <a
                 className="NavbarFilter"
-                href="#filter"
-                // onClick={() => setShowModal(true)}
+                href="#dataFilter"
+                onClick={() => setShowModal(true)}
               >
                 <FaFilter className="NavbarFilterIcon" />
-                {/* {filter[2].count > 0 && (
-                  <span className="FilterBadge">{filter[2].count}</span>
-                )} */}
+                {
+                  filterContext.filterValue[1]?.count > 0 && (
+                    <span className="FilterBadge">{filterContext.filterValue[1].count}</span>
+                  )
+                }
               </a>
             </span>
           )}
         </Container>
       </Navbar>
 
-      {/* <Modal
+      <Modal
         show={showModal}
         fullscreen="lg-down"
         onHide={() => setShowModal(false)}
@@ -97,23 +70,20 @@ function MyNavbar(props) {
 
         <div className="FilterContainer">
           <div className="FilterSegment">
-            <FilterTypes />
-          </div>
-          <div className="FilterSegment">
-            <FilterGen />
+            <FilterObject title='By Genres' />
           </div>
         </div>
 
         <Button
           style={{ margin: 10 }}
           onClick={() => {
-            callbackFilter(filter);
+            callbackFilter(filterContext.filterValue);
             setShowModal(false);
           }}
         >
           Terapkan Filter
         </Button>
-      </Modal> */}
+      </Modal>
       </>
   );
 }

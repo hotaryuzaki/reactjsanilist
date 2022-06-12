@@ -6,6 +6,7 @@ import '../mystyle.css';
 import Constants from '../config/Constants';
 import MyNavbar from '../components/MyNavbar';
 import MediaScore from '../components/MediaScore';
+import GenreList from '../components/GenreList';
 
 const url = 'https://graphql.anilist.co/';
 const headers = { 'Content-Type': 'application/json' };
@@ -63,6 +64,7 @@ function Detail() {
             volumes
             episodes
             coverImage { large color }
+            averageScore
             meanScore
             popularity
             trending
@@ -76,9 +78,9 @@ function Detail() {
         { headers }
       );
       
+
       setData(response.data.data.media);
       setError([]);
-      
       // STRING TO RENDER HTML
       const desc = document.getElementById('desc');
       desc.innerHTML = response.data.data.media.description;
@@ -120,39 +122,71 @@ function Detail() {
 
         <div className='Profile window' style={{ backgroundColor: `${data.coverImage.color}`}}>
           <Container className='MediaBox'>
-            <Col className='MediaImageCol' xs={5} sm={5} md={3} lg={3}>
-              <Row className='MediaImageRow'>
-                <div className='MediaImageRow'>
-                  <MediaScore score={data.meanScore} />
+            <Col className='MediaCol' xs={5} sm={5} md={4} lg={4}>
+              <Row className='MediaRow'>
+                <Col className='MediaImageContainer'>
+                  <MediaScore score={data.averageScore} />
+                  
                   <img
                     src={data.coverImage.large}
                     className='CoverImage'
                     alt='item_image'
                   />
-                </div>
+                </Col>
+              </Row>
+
+              <Row className='MediaRow p-2'>
+                <Row className='MediaData'>
+                  <Col className='MediaLabel' xs={12} sm={3} md={3} lg={3}>Status</Col>
+                  <Col className='MediaText' xs={12} sm={9} md={9} lg={9}>: {data.status}</Col>
+                </Row>
+                
+                <Row className='MediaData'>
+                  <Col className='MediaLabel' xs={12} sm={3} md={3} lg={3}>Start Date</Col>
+                  <Col className='MediaText' xs={12} sm={9} md={9} lg={9}>: {data.startDate.day} {Constants.months[data.startDate.month]} {data.startDate.year}</Col>
+                </Row>
+                
+                <Row className='MediaData'>
+                  <Col className='MediaLabel' xs={12} sm={3} md={3} lg={3}>Format</Col>
+                  <Col className='MediaText' xs={12} sm={9} md={9} lg={9}>: {data.format}</Col>
+                </Row>
+                
+                <Row className='MediaData'>
+                  <Col className='MediaLabel' xs={12}sm={3} md={3} lg={3}>Source</Col>
+                  <Col className='MediaText' xs={12} sm={9} md={9} lg={9}>: {data.source}</Col>
+                </Row>
+                
+                <Row className='MediaData'>
+                  <Col className='MediaLabel' xs={12} sm={3} md={3} lg={3}>Episodes</Col>
+                  <Col className='MediaText' xs={12} sm={9} md={9} lg={9}>: {data.episodes}</Col>
+                </Row>
+                
+                <Row className='MediaData'>
+                  <Col className='MediaLabel' xs={12} sm={3} md={3} lg={3}>Popularity</Col>
+                  <Col className='MediaText' xs={12} sm={9} md={9} lg={9}>: {data.popularity}</Col>
+                </Row>
+                
+                <Row className='MediaData'>
+                  <Col className='MediaLabel' xs={12} sm={3} md={3} lg={3}>Trending</Col>
+                  <Col className='MediaText' xs={12} sm={9} md={9} lg={9}>: {data.trending}</Col>
+                </Row>
               </Row>
             </Col>
             
-            <Col className='MediaInfo' xs={7} sm={7} md={3} lg={3}>
-              <Row className='MediaTitle'>
-                {data.title.userPreferred}
-              </Row>
-              
-              <Row className='MediaData'>
-                <Col className='MediaLabel' xs={3} sm={3} md={3} lg={3}>Status</Col>
-                <Col className='MediaText' xs={9} sm={9} md={9} lg={9}>: {data.status}</Col>
-              </Row>
-              
-              <Row className='MediaData'>
-                <Col className='MediaLabel' xs={3} sm={3} md={3} lg={3}>Start Date</Col>
-                <Col className='MediaText' xs={9} sm={9} md={9} lg={9}>: {data.startDate.day} {Constants.months[data.startDate.month]} {data.startDate.year}</Col>
-              </Row>
+            <Col className='MediaInfoCol' xs={7} sm={7} md={8} lg={8}>
+              <div className='MediaInfoContainer'>
+                <div className='MediaTitle'>{data.title.userPreferred}</div>
+                <div className='MediaTitleSeparator' />
+                <div className='GenreList'>
+                  <GenreList data={data.genres} limit={100}/>
+                </div>
+                <div id='desc' className='MediaDescription'></div>
+              </div>
             </Col>
           </Container>
 
 
 
-          <div id='desc' className='MediaDescription'></div>
         </div>
           
 

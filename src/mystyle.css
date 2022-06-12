@@ -4,7 +4,8 @@
   --white: #ffffff;
   --icon: #2b2d42;
   --grey: #eeeeee;
-  --green: rgb(26, 143, 26);
+  --violet: #6872D8;
+  --lavender: #D9DBF1;
 }
 
 .App {
@@ -144,6 +145,7 @@
   padding: 5px;
 }
 .ItemBox {
+  position: relative;
   overflow: hidden;
   border-radius: 10px;
   background-color: var(--grey);
@@ -158,23 +160,25 @@
   height: 50px;
   font-size: .8em;
   padding: 5px 10px;
+  overflow: hidden;
+}
+.GenreList {
+  display: flex;
+  flex-direction: row;
 }
 .ItemGenre {
-  position: absolute;
-  color: var(--black);
+  color: var(--violet);
   font-size: .8em;
   border-radius: 5px;
-  padding: 5px 10px;
-  margin: 5px;
-  background-color: var(--grey);
+  padding: 5px 7px;
+  margin: 5px 0 5px 5px;
+  /* background-color: var(--violet); */
+  border: var(--violet) solid 1px;
 }
 
 .Profile {
   display: block;
-  padding-top: 5px;
-  padding-bottom: 5px;
-  padding-left: 10px;
-  padding-right: 10px;
+  padding: 10px;
   border-radius: 10px;
 }
 .MediaBox {
@@ -186,23 +190,36 @@
   padding-right: 10px !important;
   background-color: var(--white);
 }
-.MediaImageCol {
+.MediaCol {
   display: block;
-  max-width: 230px;
 }
-.MediaImageRow {
+.MediaRow {
   width: 100%;
+  margin: 0 !important;
+}
+.MediaImageContainer {
+  padding: 0 !important;
+  position: relative;
 }
 .CoverImage {
   width: 100%;
   object-fit: fill;
 }
-.MediaInfo {
+.MediaInfoCol {
   display: block;
+  padding: 10px 15px;
+}
+.MediaInfoContainer {
+  width: 100%;
 }
 .MediaTitle {
   width: 100%;
   font-size: 1.2em;
+}
+.MediaTitleSeparator {
+  height: 1px;
+  border-bottom: var(--grey) solid 1px;
+  margin: 10px 0;
 }
 .MediaData {
   width: 100%;
@@ -211,19 +228,24 @@
   max-width: 70px;
   color: var(--black2);
   font-size: .8em;
+  line-height: 25px;
   padding: 0 !important;
 }
 .MediaText {
   color: var(--black);
   font-size: .8em;
+  line-height: 25px;
 }
 .MediaScore {
   position: absolute;
-  display: block;
   right: 0;
-  color: var(--black);
-  width: 50px !important;
-  /* height: 50px !important; */
+  color: var(--white);
   padding: 5px;
-  background-color: var(--green);
+  font-size: .9em;
+  font-weight: bold;
+  background-color: var(--icon);
+}
+.MediaDescription {
+  font-size: .9em;
+  margin-top: 10px;
 }

@@ -1,11 +1,11 @@
 const GenreList = (props) => {
   return (
     props.data.map((genre, index) => {
-      if (index < 1) {
+      if (index < props.limit) {
         return (
-          <p className="ItemGenre" key={index}>
+          <div className="ItemGenre" key={index}>
             {genre}
-          </p>
+          </div>
         );
       }
 

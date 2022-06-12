@@ -1,6 +1,7 @@
 import React, { useEffect} from 'react';
 import { Col, Row } from 'react-bootstrap';
 import GenreList from './GenreList';
+import MediaScore from '../components/MediaScore';
 import '../mystyle.css';
 
 const DataList = (props) => {
@@ -14,13 +15,17 @@ const DataList = (props) => {
         <a key={item.id} href={`/reactjs-anilist/${item.id}`} key={index}>
           <Col className='Item' xs={6} sm={6} md={3} lg={3}>
             <div className='ItemBox'>
-              <GenreList data={item.genres} />
+              <MediaScore score={item.meanScore} />
 
               <img
                 src={item.coverImage.large}
                 className='ItemImg'
                 alt='item_image'
               />
+
+              <div className='GenreList'>
+                <GenreList data={item.genres} limit={2} />
+              </div>
 
               <div className='ItemName'>
                 {item.title.userPreferred}

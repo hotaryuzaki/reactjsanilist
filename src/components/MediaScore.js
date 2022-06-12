@@ -1,7 +1,7 @@
 const MediaScore = ({ score }) => {
   return (
     <div className="MediaScore">
-      {score}
+      {score}%
     </div>
   )
 }
