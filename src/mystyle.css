@@ -1,8 +1,10 @@
 :root {
   --black: #0f0f0f;
+  --black2: rgb(50, 50, 50);
   --white: #ffffff;
   --icon: #2b2d42;
   --grey: #eeeeee;
+  --green: rgb(26, 143, 26);
 }
 
 .App {
@@ -72,10 +74,9 @@
   align-items: center;
   justify-content: center;
   margin: auto;
-  padding-left: 5px;
-  padding-right: 5px;
+  /* padding-left: 5px;
+  padding-right: 5px; */
 }
-
 .Content {
   width: 100%;
 }
@@ -136,7 +137,6 @@
 }
 
 .Item {
-  width: 50%;
   display: block;
   float: left;
   align-items: center;
@@ -167,4 +167,63 @@
   padding: 5px 10px;
   margin: 5px;
   background-color: var(--grey);
+}
+
+.Profile {
+  display: block;
+  padding-top: 5px;
+  padding-bottom: 5px;
+  padding-left: 10px;
+  padding-right: 10px;
+  border-radius: 10px;
+}
+.MediaBox {
+  display: flex;
+  overflow: hidden;
+  border-radius: 10px;
+  margin-bottom: 10px;
+  padding-left: 0 !important;
+  padding-right: 10px !important;
+  background-color: var(--white);
+}
+.MediaImageCol {
+  display: block;
+  max-width: 230px;
+}
+.MediaImageRow {
+  width: 100%;
+}
+.CoverImage {
+  width: 100%;
+  object-fit: fill;
+}
+.MediaInfo {
+  display: block;
+}
+.MediaTitle {
+  width: 100%;
+  font-size: 1.2em;
+}
+.MediaData {
+  width: 100%;
+}
+.MediaLabel {
+  max-width: 70px;
+  color: var(--black2);
+  font-size: .8em;
+  padding: 0 !important;
+}
+.MediaText {
+  color: var(--black);
+  font-size: .8em;
+}
+.MediaScore {
+  position: absolute;
+  display: block;
+  right: 0;
+  color: var(--black);
+  width: 50px !important;
+  /* height: 50px !important; */
+  padding: 5px;
+  background-color: var(--green);
 }

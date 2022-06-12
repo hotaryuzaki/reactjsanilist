@@ -55,7 +55,7 @@ function MyNavbar(props) {
         <Container className="NavbarContainer">
           <span className="NavbarLeft">
             {hasBack && (
-              <a key="hasBack" href="/mypokedex/">
+              <a key="hasBack" href="/reactjs-anilist/">
                 <FaArrowLeft className="NavbarBack" />
               </a>
             )}

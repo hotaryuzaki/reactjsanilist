@@ -1,4 +1,5 @@
 import React, { useEffect} from 'react';
+import { Col, Row } from 'react-bootstrap';
 import GenreList from './GenreList';
 import '../mystyle.css';
 
@@ -10,8 +11,8 @@ const DataList = (props) => {
   return (
     data &&
       data.map((item, index) => (
-        <a key={item.id} href={`/reactjs-for-native/${item.id}`} key={index}>
-          <div className='Item'>
+        <a key={item.id} href={`/reactjs-anilist/${item.id}`} key={index}>
+          <Col className='Item' xs={6} sm={6} md={3} lg={3}>
             <div className='ItemBox'>
               <GenreList data={item.genres} />
 
@@ -25,7 +26,7 @@ const DataList = (props) => {
                 {item.title.userPreferred}
               </div>
             </div>
-          </div>
+          </Col>
         </a>
       ))
   );

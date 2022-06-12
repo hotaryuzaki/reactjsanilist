@@ -1,6 +1,6 @@
 import React, { useCallback, useContext, useEffect, useMemo, useState } from 'react';
 import axios from 'axios';
-import { Button, Toast, ToastContainer } from 'react-bootstrap';
+import { Button, Container, Col, Row, Toast, ToastContainer } from 'react-bootstrap';
 import InfiniteScroll from 'react-infinite-scroller';
 // import { FilterContext } from '../config/ReactContext';
 import MyNavbar from '../components/MyNavbar';
@@ -8,6 +8,7 @@ import DataList from '../components/DataList';
 import '../mystyle.css';
 
 const url = 'https://graphql.anilist.co/';
+const headers = { 'Content-Type': 'application/json' };
 const appIcon = 'https://anilist.co/img/icons/icon.svg';
 
 function Home() {
@@ -16,7 +17,7 @@ function Home() {
   const [data, setData] = useState([]);
   const [pageInfo, setPageInfo] = useState([]);
   const [error, setError] = useState(false);
-  const [perPage, setPerPage] = useState(10);
+  const [perPage, setPerPage] = useState(16);
   // const [page, setPage] = useState(1);
   const [loading, setLoading] = useState(true);
   const [loadingMore, setLoadingMore] = useState(true);
@@ -30,7 +31,7 @@ function Home() {
       let unmounted = false; // FLAG TO CHECK COMPONENT UNMOUNT
 
     // INFINITE SCROLL LOADING ANIMATION - DIBATASI 1000 DATA
-    if (!unmounted && data.length === 20 - perPage) 
+    if (!unmounted && data.length === 1000 - perPage) 
       setLoadingMore(false);
 
     // CLEAR FUNCTION COMPONENT UNMOUNT
@@ -63,10 +64,6 @@ function Home() {
   // GET API DATA ADDITIONAL
   const _getAdditional = useCallback (async () => {
     try {
-      const headers = {
-        'Content-Type': 'application/json'
-      };
-
       const query = {
         query : `{
           genres: GenreCollection
@@ -104,10 +101,6 @@ function Home() {
   // GET API DATA LIST
   const _getList = (async (page = 1) => {
     try {
-      const headers = {
-        'Content-Type': 'application/json'
-      };
-
       const query = {
         query : `{
           list: Page(page: ${page}, perPage: ${perPage}) {
@@ -118,7 +111,7 @@ function Home() {
               lastPage
               hasNextPage
             }
-            media: media(sort: ID_DESC isAdult: false) {
+            media: media(sort: TRENDING_DESC isAdult: false) {
               id
               title { userPreferred }
               genres
@@ -198,18 +191,20 @@ function Home() {
         // callbackFilter={_callbackFilter}
       />
 
-      <InfiniteScroll
-        pageStart={1}
-        loadMore={_getList}
-        hasMore={loadingMore}
-        loader={
-          <div key={0} style={{ marginBottom: 50 }}>
-            <img src={appIcon} className="Loading" alt="logo" />
-          </div>
-        }
-      >
-        <DataList data={data} />
-      </InfiniteScroll>
+      <Container>
+        <InfiniteScroll
+          pageStart={1}
+          loadMore={_getList}
+          hasMore={loadingMore}
+          loader={
+            <div key={0} style={{ marginBottom: 50 }}>
+              <img src={appIcon} className="Loading" alt="logo" />
+            </div>
+          }
+        >
+          <DataList data={data} />
+        </InfiniteScroll>
+      </Container>
 
       {error.length > 0 && error}
     </div>
