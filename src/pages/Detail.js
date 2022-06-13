@@ -2,6 +2,7 @@ import React, { useCallback, useEffect, useState } from 'react';
 import { useParams } from "react-router-dom";
 import { Container, Col, Row, Toast, ToastContainer } from 'react-bootstrap';
 import axios from 'axios';
+import parse from "html-react-parser";
 import '../mystyle.css';
 import Constants from '../config/Constants';
 import MyNavbar from '../components/MyNavbar';
@@ -77,12 +78,8 @@ function Detail() {
         { headers }
       );
       
-
       setData(response.data.data.media);
       setError([]);
-      // STRING TO RENDER HTML
-      const desc = document.getElementById('desc');
-      desc.innerHTML = response.data.data.media.description;
     }
 
     catch (e) {
@@ -179,7 +176,7 @@ function Detail() {
                 <div className='GenreList'>
                   <GenreList data={data.genres} limit={100}/>
                 </div>
-                <div id='desc' className='MediaDescription'></div>
+                <div id='desc' className='MediaDescription'>{parse(data.description)}</div>
               </div>
             </Col>
           </div>
