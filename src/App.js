@@ -10,7 +10,7 @@ import './mystyle.css';
 function App() {
   return (
     <ReactContextProvider>
-      <BrowserRouter>
+      <BrowserRouter basename="/reactjsanilist">
         <Routes>
           <Route path="/" element={<Layout />}>
             <Route index element={<Home />} />

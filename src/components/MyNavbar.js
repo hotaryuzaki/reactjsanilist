@@ -26,7 +26,7 @@ function MyNavbar(props) {
         <Container className="NavbarContainer">
           <span className="NavbarLeft">
             {hasBack && (
-              <a key="hasBack" href="/">
+              <a key="hasBack" href="/reactjsanilist/">
                 <FaArrowLeft className="NavbarBack" />
               </a>
             )}
