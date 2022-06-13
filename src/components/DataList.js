@@ -17,7 +17,7 @@ const DataList = (props) => {
   return (
     data &&
       data.map((item, index) => (
-        <a key={item.id} href={`/reactjs-anilist/${item.id}`} key={index}>
+        <a key={item.id} href={`/${item.id}`} key={index}>
           <Col className='Item' xs={6} sm={6} md={3} lg={3}>
             <div className='ItemBox'>
               <MediaScore score={item.meanScore} />
