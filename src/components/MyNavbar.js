@@ -16,9 +16,9 @@ function MyNavbar(props) {
   } = props;
   const [showModal, setShowModal] = useState(false);
   
-  useEffect(() => {
-    console.log('filterContext', filterContext.filterValue);
-  }, [filterContext.filterValue])
+  // useEffect(() => {
+  //   console.log('filterContext', filterContext.filterValue);
+  // }, [filterContext.filterValue])
 
   return (
     <>
@@ -73,16 +73,30 @@ function MyNavbar(props) {
             <FilterObject title='By Genres' />
           </div>
         </div>
+        
+        <div className="FilterApplyContainer">
+          <Button
+            variant="secondary"
+            className='FilterApplyButton'
+            onClick={() => {
+              filterContext.setFilterValue(filterContext.filterDefault);
+              setShowModal(false);
+              callbackFilter([]);
+            }}
+          >
+            Reset
+          </Button>
 
-        <Button
-          style={{ margin: 10 }}
-          onClick={() => {
-            callbackFilter(filterContext.filterValue);
-            setShowModal(false);
-          }}
-        >
-          Terapkan Filter
-        </Button>
+          <Button
+            className='FilterApplyButton'
+            onClick={() => {
+              setShowModal(false);
+              callbackFilter(filterContext.filterValue);
+            }}
+          >
+            Terapkan Filter
+          </Button>
+        </div>
       </Modal>
       </>
   );

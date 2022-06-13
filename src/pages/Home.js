@@ -3,40 +3,31 @@ import axios from 'axios';
 import { FilterContext } from '../config/ReactContext';
 import { Button, Container, Col, Row, Toast, ToastContainer } from 'react-bootstrap';
 import InfiniteScroll from 'react-infinite-scroller';
+import Constants from '../config/Constants';
 import MyNavbar from '../components/MyNavbar';
 import DataList from '../components/DataList';
 import '../mystyle.css';
 
-const url = 'https://graphql.anilist.co/';
 const headers = { 'Content-Type': 'application/json' };
 const appIcon = 'https://anilist.co/img/icons/icon.svg';
 
 function Home() {
   const filterContext = useContext(FilterContext);
   const [dataFilter, setDataFilter] = useState([]);
+  const [pageInfo, setpageInfo] = useState([]);
   const [data, setData] = useState([]);
   const [error, setError] = useState(false);
   const [perPage, setPerPage] = useState(16);
-  // const [page, setPage] = useState(1);
+  const [page, setPage] = useState(1);
   const [loading, setLoading] = useState(true);
   const [loadingMore, setLoadingMore] = useState(true);
+  const [loadingFlag, setLoadingFlag] = useState(false);
+  
 
   // MOUNT FUNCTIONS CALL
   useEffect(() => {
     _getApi();
   }, []); // SET EMPTY ARRAY SO USEEFFECT JUST CALL ONCE
-
-  useEffect(() => {
-      let unmounted = false; // FLAG TO CHECK COMPONENT UNMOUNT
-
-    // INFINITE SCROLL LOADING ANIMATION - DIBATASI 1000 DATA
-    if (!unmounted && data.length === 1000 - perPage) 
-      setLoadingMore(false);
-
-    // CLEAR FUNCTION COMPONENT UNMOUNT
-    return () => unmounted = true;
-
-  }, [data])
 
   const _getApi = async () => {
     try {
@@ -72,7 +63,7 @@ function Home() {
       // console.log(query);
 
       const response = await axios.post(
-        url,
+        Constants.url,
         query,
         { headers }
       );
@@ -82,7 +73,8 @@ function Home() {
       });
       const data = [genre, { count: 0, filter: [] }]
 
-      filterContext.setFilterValue(data); // UPDATE GLOBAL STATE
+      filterContext.setFilterDefault(data); // UPDATE GLOBAL STATE - FILTER RESET
+      filterContext.setFilterValue(data); // UPDATE GLOBAL STATE - FILTER VALUE
       setLoading(false);
     }
 
@@ -103,19 +95,17 @@ function Home() {
   }, []);
 
   // GET API DATA LIST
-  const _getList = (async (page = 1) => {
+  const _getList = (async () => {
+    // BLOCK MULTIPLE REQUEST
+    if (loadingFlag) return false;
+
     try {
-      console.log('_getList', page);
+      setLoadingFlag(true);
       let filter = '';
 
       // CEK JIKA MELAKUKAN FILTER
-      if (dataFilter.length > 0) {
-        console.log('dataFilter', dataFilter);
-        // dataFilter[1].filter.length > 0
+      if (dataFilter.length > 0)
         filter = `, genre_in: [${dataFilter[1].filter}]`;
-      }
-
-      console.log('filter', filter);
 
       const query = {
         query : `{
@@ -141,19 +131,27 @@ function Home() {
       console.log('query', query);
 
       const response = await axios.post(
-        url,
+        Constants.url,
         query,
         { headers }
       );
       
+      // UNTUK DATA HALAMAN PERTAMA
       if (page === 1) {
+        setpageInfo(response.data.data.list.pageInfo);
         setData(response.data.data.list.media);
         setLoading(false);
+        setLoadingMore(true); // RESET hasMore PROPS FOR INFINITE SCROLL
       }
-      else
+      // UNTUK DATA NEXT PAGE
+      else {
+        setpageInfo(response.data.data.list.pageInfo);
         setData([ ...data, ...response.data.data.list.media ]);
+      }
       
+      // UPDATE INFO
       setError([]);
+      setPage(page + 1);
     }
 
     catch (e) {
@@ -172,13 +170,63 @@ function Home() {
   });
 
   // USEEFFECT FILTER
-  const _callbackFilter = useCallback(async (data) => {
-    if (filterContext.filterValue) {
-      setDataFilter(data);
-      setLoading(true);
-      // await _getList(1, data);
-    }
+  const _callbackFilter = useCallback((data) => {
+    window.scrollTo(0, 0); // SCROLL PAGE TO TOP
+    setPage(1); // RESET PAGING
+
+    // SET FILTER DATA THEN HIT API WILL HANDLE BY USE EFFECT OF DATAFILTER
+    setTimeout(() => {
+      // APPLY FILTER
+      if (data.length > 0) {
+        console.log('HALOOOO');
+        setDataFilter(data); 
+      }
+
+      // RESET FILTER
+      else {
+        console.log('KESINI');
+        setDataFilter([]);
+      }
+
+    }, 500); // TO GIVE SOME TIME SCROLL TO TOP ANIMATION
+
   }, []);
+
+  // STATE dataFilter UPDATE CALLBACK
+  useEffect(() => {
+    console.log('useEffect dataFilter', dataFilter);
+    let unmounted = false; // FLAG TO CHECK COMPONENT UNMOUNT
+
+    // MEMASTIKAN FILTER DATA APPLY - UNTUK PAGE 1
+    if (!unmounted && page === 1)
+      _getList();
+
+    // CLEAR FUNCTION COMPONENT UNMOUNT
+    return () => unmounted = true;
+
+  }, [dataFilter]);
+
+  // STATE data UPDATE CALLBACK
+  useEffect(() => {
+    console.log('useEffect data', pageInfo);
+    let unmounted = false; // FLAG TO CHECK COMPONENT UNMOUNT
+
+    // INFINITE SCROLL - DIBATASI 1000 DATA
+    if (!unmounted && data.length === 1000 - perPage)
+      setLoadingMore(false);
+
+    // JIKA SUDAH DATA TERAKHIR
+    if (!unmounted && !pageInfo.hasNextPage)
+      setLoadingMore(false);
+
+    // BLOCK MULTIPLE CALL API
+    if (!unmounted && loadingFlag)
+      setLoadingFlag(false);
+
+    // CLEAR FUNCTION COMPONENT UNMOUNT
+    return () => unmounted = true;
+
+  }, [data, pageInfo]);
 
 
   // RENDER
@@ -200,7 +248,6 @@ function Home() {
           pageStart={1}
           loadMore={_getList}
           hasMore={loadingMore}
-          initialLoad={dataFilter.length > 0 ? true : false}
           loader={
             <div key={0} style={{ marginBottom: 50 }}>
               <img src={appIcon} className="Loading" alt="logo" />

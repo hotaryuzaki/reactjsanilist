@@ -9,6 +9,11 @@ const DataList = (props) => {
   	data
   } = props;
 
+  if (data.length === 0)
+    return (
+      <p style={{ textAlign: 'center' }}>Data tidak ditemukan.</p>
+    );
+
   return (
     data &&
       data.map((item, index) => (

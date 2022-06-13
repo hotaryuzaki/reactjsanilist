@@ -13,7 +13,7 @@ const FilterObject = ({ data, title }) => {
   }, [filterContext.filterValue])
 
   const setChecked = async (object, i, name, value) => {
-    // console.log('setChecked', object, i, name, value);
+    console.log('setChecked', object, i, name, value);
     let update = JSON.parse(JSON.stringify(filter)); // DEEP COPY ARRAY NEEDED!
     let filterParams = [];
 

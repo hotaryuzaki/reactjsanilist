@@ -9,6 +9,7 @@ import React, { useEffect, useState } from 'react';
 import { FilterContext } from './ReactContext';
 
 const ReactContextProvider = (props) => {
+  const [filterDefault, setFilterDefault] = useState([]);
   const [filterValue, setFilterValue] = useState([]);
 
   // useEffect(() => {
@@ -17,6 +18,8 @@ const ReactContextProvider = (props) => {
 
   return (
     <FilterContext.Provider value={{
+      filterDefault: filterDefault,
+      setFilterDefault: (value) => setFilterDefault(value),
       filterValue: filterValue,
       setFilterValue: (value) => setFilterValue(value)
     }}>

@@ -1,6 +1,7 @@
 :root {
   --black: #0f0f0f;
   --black2: rgb(50, 50, 50);
+  --black-opacity: rgba(50, 50, 50, 0.2);
   --white: #ffffff;
   --icon: #2b2d42;
   --grey: #eeeeee;
@@ -124,6 +125,14 @@
   display: block;
   margin-bottom: 10px;
 }
+.FilterApplyContainer {
+  display: flex;
+  justify-content: space-evenly;
+}
+.FilterApplyButton {
+  flex: 1;
+  margin: 10px;
+}
 .FilterButton {
   margin: 0 5px 10px;
 }
@@ -165,6 +174,7 @@
 .GenreList {
   display: flex;
   flex-direction: row;
+  flex-wrap: wrap;
 }
 .ItemGenre {
   color: var(--violet);
@@ -188,7 +198,7 @@
   margin-bottom: 10px;
   padding-left: 0 !important;
   padding-right: 10px !important;
-  background-color: var(--white);
+  background-color: var(--grey);
 }
 .MediaCol {
   display: block;
@@ -218,7 +228,7 @@
 }
 .MediaTitleSeparator {
   height: 1px;
-  border-bottom: var(--grey) solid 1px;
+  border-bottom: var(--black-opacity) solid 1px;
   margin: 10px 0;
 }
 .MediaData {
@@ -239,7 +249,7 @@
 .MediaScore {
   position: absolute;
   right: 0;
-  color: var(--white);
+  color: rgb(236, 49, 49);
   padding: 5px;
   font-size: .9em;
   font-weight: bold;
