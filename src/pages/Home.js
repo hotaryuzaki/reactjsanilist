@@ -1,7 +1,7 @@
 import React, { useCallback, useContext, useEffect, useMemo, useState } from 'react';
 import axios from 'axios';
 import { FilterContext } from '../config/ReactContext';
-import { Button, Container, Col, Row, Toast, ToastContainer } from 'react-bootstrap';
+import { Container, Toast, ToastContainer } from 'react-bootstrap';
 import InfiniteScroll from 'react-infinite-scroller';
 import Constants from '../config/Constants';
 import MyNavbar from '../components/MyNavbar';
@@ -13,7 +13,11 @@ const appIcon = 'https://anilist.co/img/icons/icon.svg';
 
 function Home() {
   const filterContext = useContext(FilterContext);
-  const [dataFilter, setDataFilter] = useState([]);
+  const [dataFilter, setDataFilter] = useState(
+    filterContext.filterValue.length > 0
+      ? filterContext.filterValue
+      : []
+  );
   const [pageInfo, setpageInfo] = useState([]);
   const [data, setData] = useState([]);
   const [error, setError] = useState(false);
@@ -32,7 +36,9 @@ function Home() {
   const _getApi = async () => {
     try {
       await _getList();
-      await _getAdditional();
+      if (filterContext.filterValue.length === 0) {
+        await _getAdditional();
+      }
       setLoading(false);
     }
 
@@ -73,9 +79,10 @@ function Home() {
       });
       const data = [genre, { count: 0, filter: [] }]
 
+      localStorage.setItem('filterDefault', JSON.stringify(data)); // SAVE IN LOCAL STORAGE
+      localStorage.setItem('filterValue', JSON.stringify(data)); // SAVE IN LOCAL STORAGE
       filterContext.setFilterDefault(data); // UPDATE GLOBAL STATE - FILTER RESET
       filterContext.setFilterValue(data); // UPDATE GLOBAL STATE - FILTER VALUE
-      setLoading(false);
     }
 
     catch (e) {
@@ -104,7 +111,7 @@ function Home() {
       let filter = '';
 
       // CEK JIKA MELAKUKAN FILTER
-      if (dataFilter.length > 0)
+      if (dataFilter.length > 0 && dataFilter[1].filter.length > 0)
         filter = `, genre_in: [${dataFilter[1].filter}]`;
 
       const query = {
@@ -128,7 +135,7 @@ function Home() {
         }`
       };
       
-      console.log('query', query);
+      // console.log('query', query);
 
       const response = await axios.post(
         Constants.url,
@@ -140,7 +147,6 @@ function Home() {
       if (page === 1) {
         setpageInfo(response.data.data.list.pageInfo);
         setData(response.data.data.list.media);
-        setLoading(false);
         setLoadingMore(true); // RESET hasMore PROPS FOR INFINITE SCROLL
       }
       // UNTUK DATA NEXT PAGE
@@ -177,16 +183,12 @@ function Home() {
     // SET FILTER DATA THEN HIT API WILL HANDLE BY USE EFFECT OF DATAFILTER
     setTimeout(() => {
       // APPLY FILTER
-      if (data.length > 0) {
-        console.log('HALOOOO');
-        setDataFilter(data); 
-      }
+      if (data.length > 0)
+        setDataFilter(data);
 
       // RESET FILTER
-      else {
-        console.log('KESINI');
+      else
         setDataFilter([]);
-      }
 
     }, 500); // TO GIVE SOME TIME SCROLL TO TOP ANIMATION
 
@@ -194,7 +196,7 @@ function Home() {
 
   // STATE dataFilter UPDATE CALLBACK
   useEffect(() => {
-    console.log('useEffect dataFilter', dataFilter);
+    // console.log('useEffect dataFilter', dataFilter);
     let unmounted = false; // FLAG TO CHECK COMPONENT UNMOUNT
 
     // MEMASTIKAN FILTER DATA APPLY - UNTUK PAGE 1
@@ -208,7 +210,7 @@ function Home() {
 
   // STATE data UPDATE CALLBACK
   useEffect(() => {
-    console.log('useEffect data', pageInfo);
+    // console.log('useEffect data', pageInfo);
     let unmounted = false; // FLAG TO CHECK COMPONENT UNMOUNT
 
     // INFINITE SCROLL - DIBATASI 1000 DATA

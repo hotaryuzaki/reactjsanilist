@@ -13,7 +13,7 @@ const FilterObject = ({ data, title }) => {
   }, [filterContext.filterValue])
 
   const setChecked = async (object, i, name, value) => {
-    console.log('setChecked', object, i, name, value);
+    // console.log('setChecked', object, i, name, value);
     let update = JSON.parse(JSON.stringify(filter)); // DEEP COPY ARRAY NEEDED!
     let filterParams = [];
 
@@ -41,6 +41,7 @@ const FilterObject = ({ data, title }) => {
     // console.log(object, i, name, value);
     // console.log(update[1]);
 
+    localStorage.setItem('filterValue', JSON.stringify(update)); // SAVE IN LOCAL STORAGE
     filterContext.setFilterValue(update); // UPDATE GLOBAL STATE
     setFilter(update);
   };

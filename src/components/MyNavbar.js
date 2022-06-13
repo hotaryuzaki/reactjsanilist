@@ -79,6 +79,7 @@ function MyNavbar(props) {
             variant="secondary"
             className='FilterApplyButton'
             onClick={() => {
+              localStorage.setItem('filterValue', JSON.stringify(filterContext.filterDefault)); // SAVE IN LOCAL STORAGE
               filterContext.setFilterValue(filterContext.filterDefault);
               setShowModal(false);
               callbackFilter([]);

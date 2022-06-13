@@ -9,8 +9,15 @@ import React, { useEffect, useState } from 'react';
 import { FilterContext } from './ReactContext';
 
 const ReactContextProvider = (props) => {
-  const [filterDefault, setFilterDefault] = useState([]);
-  const [filterValue, setFilterValue] = useState([]);
+   // GET LOCAL STORAGE DATA
+  const localFilterDefault = JSON.parse(localStorage.getItem("filterDefault"));
+  const [filterDefault, setFilterDefault] = useState(
+    localFilterDefault && localFilterDefault.length > 0 ? localFilterDefault : []
+  );
+  const localFilterValue = JSON.parse(localStorage.getItem("filterValue"));
+  const [filterValue, setFilterValue] = useState(
+    localFilterValue && localFilterValue.length > 0 ? localFilterValue : []
+  );
 
   // useEffect(() => {
   //   console.log('ReactContextProvider', filterValue);
