@@ -14,11 +14,16 @@ function MyNavbar(props) {
     hasBack = false,
     callbackFilter
   } = props;
+  const [dataFilter, setDataFilter] = useState([]);
   const [showModal, setShowModal] = useState(false);
   
   // useEffect(() => {
   //   console.log('filterContext', filterContext.filterValue);
   // }, [filterContext.filterValue])
+
+  const _callbackPress = (data) => {
+    setDataFilter(data);
+  }
 
   return (
     <>
@@ -70,7 +75,7 @@ function MyNavbar(props) {
 
         <div className="FilterContainer">
           <div className="FilterSegment">
-            <FilterObject title='By Genres' />
+            <FilterObject title='By Genres' callbackPress={_callbackPress}/>
           </div>
         </div>
         
@@ -79,8 +84,6 @@ function MyNavbar(props) {
             variant="secondary"
             className='FilterApplyButton'
             onClick={() => {
-              localStorage.setItem('filterValue', JSON.stringify(filterContext.filterDefault)); // SAVE IN LOCAL STORAGE
-              filterContext.setFilterValue(filterContext.filterDefault);
               setShowModal(false);
               callbackFilter([]);
             }}
@@ -92,7 +95,7 @@ function MyNavbar(props) {
             className='FilterApplyButton'
             onClick={() => {
               setShowModal(false);
-              callbackFilter(filterContext.filterValue);
+              callbackFilter(dataFilter);
             }}
           >
             Terapkan Filter

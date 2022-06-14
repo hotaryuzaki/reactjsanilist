@@ -1,8 +1,9 @@
 const MediaScore = ({ score }) => {
   return (
-    <div className="MediaScore">
-      {score}%
-    </div>
+    score &&
+      <div className="MediaScore">
+        {score}%
+      </div>
   )
 }
 

@@ -3,9 +3,9 @@ import { FilterContext } from '../config/ReactContext';
 import { ToggleButton} from 'react-bootstrap';
 import '../mystyle.css';
 
-const FilterObject = ({ data, title }) => {
+const FilterObject = ({ title, callbackPress }) => {
   const filterContext = useContext(FilterContext);
-  const [filter, setFilter] = useState(filterContext.filterValue); // COPY ARRAY 
+  const [filter, setFilter] = useState(filterContext.filterValue); // COPY ARRAY
 
   // UPDATE STATE JIKA ADA PERUBAHAN DATA CONTEXT
   useEffect (() => {
@@ -41,8 +41,7 @@ const FilterObject = ({ data, title }) => {
     // console.log(object, i, name, value);
     // console.log(update[1]);
 
-    localStorage.setItem('filterValue', JSON.stringify(update)); // SAVE IN LOCAL STORAGE
-    filterContext.setFilterValue(update); // UPDATE GLOBAL STATE
+    callbackPress(update);
     setFilter(update);
   };
 
@@ -51,18 +50,19 @@ const FilterObject = ({ data, title }) => {
       <p className='FilterTitle' key='FilterGenres-title'>{title}</p>  
       {
         filter[0].map((item, index) => (
-          <ToggleButton
-            key={`FilterGenres-${index}`}
-            id={`FilterGenres-${index}`}
-            className="FilterButton"
-            size="sm"
-            type="checkbox"
-            variant="outline-primary"
-            checked={item.value}
-            onChange={(e) => setChecked('genres', index, item.genre, !item.value)}
-          >
-            {item.genre}
-          </ToggleButton>
+          item.genre.toLowerCase() !== 'hentai' &&
+            <ToggleButton
+              key={`FilterGenres-${index}`}
+              id={`FilterGenres-${index}`}
+              className="FilterButton"
+              size="sm"
+              type="checkbox"
+              variant="outline-primary"
+              checked={item.value}
+              onChange={(e) => setChecked('genres', index, item.genre, !item.value)}
+            >
+              {item.genre}
+            </ToggleButton>
         ))
       }
     </>

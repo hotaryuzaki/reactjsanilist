@@ -1,16 +1,17 @@
-const GenreList = (props) => {
+const GenreList = ({ data, limit }) => {
   return (
-    props.data.map((genre, index) => {
-      if (index < props.limit) {
-        return (
-          <div className="ItemGenre" key={index}>
-            {genre}
-          </div>
-        );
-      }
+    data &&
+      data.map((genre, index) => {
+        if (index < limit) {
+          return (
+            <div className="ItemGenre" key={index}>
+              {genre}
+            </div>
+          );
+        }
 
-      return false;
-    })
+        return false;
+      })
   )
 }
 

@@ -183,12 +183,18 @@ function Home() {
     // SET FILTER DATA THEN HIT API WILL HANDLE BY USE EFFECT OF DATAFILTER
     setTimeout(() => {
       // APPLY FILTER
-      if (data.length > 0)
+      if (data.length > 0) {
+        localStorage.setItem('filterValue', JSON.stringify(data)); // SAVE IN LOCAL STORAGE
+        filterContext.setFilterValue(data); // SAVE CONTEXT
         setDataFilter(data);
+      }
 
       // RESET FILTER
-      else
+      else {
+        localStorage.setItem('filterValue', JSON.stringify(filterContext.filterDefault)); // RESET LOCAL STORAGE
+        filterContext.setFilterValue(filterContext.filterDefault); // RESET CONTEXT
         setDataFilter([]);
+      }
 
     }, 500); // TO GIVE SOME TIME SCROLL TO TOP ANIMATION
 
