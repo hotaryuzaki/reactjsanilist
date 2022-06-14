@@ -176,7 +176,9 @@ function Detail() {
                 <div className='GenreList'>
                   <GenreList data={data.genres} limit={100}/>
                 </div>
-                <div id='desc' className='MediaDescription'>{parse(data.description)}</div>
+                <div id='desc' className='MediaDescription'>
+                  { data.description ? parse(data.description) : '' }
+                </div>
               </div>
             </Col>
           </div>
